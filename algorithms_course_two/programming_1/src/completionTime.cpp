@@ -72,7 +72,7 @@ std::string inputFile("../data/jobs.txt");
    iss>>weight;
    iss>>length;
     
-     std::cout<<"Getting weight: "<<weight<<", length: "<<length<<std::endl;
+   // std::cout<<"Getting weight: "<<weight<<", length: "<<length<<std::endl;
    int difference = weight - length;
    // inputArray[counter] = difference;
    inputArray[counter] = jobNode(weight, length);
@@ -82,18 +82,28 @@ std::string inputFile("../data/jobs.txt");
 
  if(counter==jobNumber){
    // sampleMinHeap <int>  jobHeap(counter, inputArray);
-   sampleMinHeap <jobNode>  jobHeap(counter, inputArray);
-   std::cout<<"Created min heap."<<std::endl;
-   std::cout<<"Indeed created min heap."<<std::endl;
-   std::cout<<"The heap size is: "<<jobHeap.size()<<std::endl;
-   std::cout<<"The min value is: "<<jobHeap.readMin()<<std::endl;
+   // sampleMinHeap <jobNode>  jobHeap(counter, inputArray);
+   // std::cout<<"Created min heap."<<std::endl;
+   // std::cout<<"Indeed created min heap."<<std::endl;
+   // std::cout<<"The heap size is: "<<jobHeap.size()<<std::endl;
+   // std::cout<<"The min value is: "<<jobHeap.readMin()<<std::endl;
 
-   jobHeap.printOut();
+   // jobHeap.printOut();
 
    // sampleMaxHeap <int>  jobHeap2(counter, inputArray);
    sampleMaxHeap <jobNode>  jobHeap2(counter, inputArray);
    std::cout<<"Created max heap."<<std::endl;
-   jobHeap2.printOut();
+   // jobHeap2.printOut();
+   
+   long waitingTime = 0;
+   int clockTime = 0;
+   while(jobHeap2.size()!=0){
+     jobNode temp = jobHeap2.extractMax();
+     clockTime += temp.readLength();
+     waitingTime += clockTime*temp.readWeight();
+   }
+   std::cout<<"The number is: "<<waitingTime<<std::endl;
+   std::cout<<"from max to min. "<<std::endl;
 
 
  }else{

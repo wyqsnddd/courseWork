@@ -26,8 +26,9 @@ class jobNode{
 
   }
   
-  int readKey() const{
-    return weight_ - length_;
+  double readKey() const{
+    /* return weight_ - length_; */
+    return (double)weight_/(double)length_;
   }
   int readWeight()const{
     return weight_;
@@ -38,7 +39,7 @@ class jobNode{
 
   bool operator<=(const jobNode& otherNode){
     
-    int diffKey = readKey() - otherNode.readKey();
+    double diffKey = readKey() - otherNode.readKey();
 
     if(diffKey < 0)
       return true;
@@ -51,7 +52,7 @@ class jobNode{
 
   bool operator<(const jobNode& otherNode){
     
-    int diffKey = readKey() - otherNode.readKey();
+    double diffKey = readKey() - otherNode.readKey();
 
     if(diffKey < 0)
       return true;
@@ -63,7 +64,7 @@ class jobNode{
   
   bool operator>=(const jobNode& otherNode){
     
-    int diffKey = readKey() - otherNode.readKey();
+    double diffKey = readKey() - otherNode.readKey();
 
     if(diffKey > 0)
       return true;
@@ -76,7 +77,7 @@ class jobNode{
 
   bool operator>(const jobNode& otherNode){
     
-    int diffKey = readKey() - otherNode.readKey();
+    double diffKey = readKey() - otherNode.readKey();
 
     if(diffKey > 0)
       return true;

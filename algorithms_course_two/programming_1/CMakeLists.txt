@@ -23,6 +23,10 @@ add_executable(completionTime
  src/completionTime.cpp)
 target_link_libraries(completionTime sampleHeap ) 
 
+
+add_executable( testJobNode
+ src/testJobNode.cpp)
+
 #add_executable(completionTime  
 #               src/temp.cpp src/completionTime.cpp)
  

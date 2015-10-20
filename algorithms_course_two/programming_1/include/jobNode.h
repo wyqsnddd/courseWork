@@ -1,5 +1,6 @@
 # ifndef JOBNODE_H
 # define JOBNODE_H
+# include <iostream>
 
 class jobNode{
  private: 
@@ -48,6 +49,14 @@ class jobNode{
     else if(diffKey == 0)
       return (readWeight() > newNode.readWeight());
   }// end of operator < 
+  
+  
+  friend std::ostream &operator<<(std::ostream &output,
+				  const jobNode &node){
+    output<<"Node key: "<<node.readKey()<<", weight: "<<node.readWeight();
+    return output;
+  }
+
     
 };
 # endif

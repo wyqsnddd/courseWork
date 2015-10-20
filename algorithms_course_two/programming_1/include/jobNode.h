@@ -11,7 +11,17 @@ class jobNode{
     weight_ = weight;
     length_ = length;
   }
+  jobNode(){
+    weight_ = 0;
+    length_ = 0;
+  }
 
+  jobNode& operator=(const jobNode& other){
+    weight_ = other.readWeight();
+    length_ = other.readLength();
+    return *this;
+  }
+  
   ~jobNode(){
 
   }
@@ -26,29 +36,55 @@ class jobNode{
     return length_;
   }
 
-  bool operator<(const jobNode& newNode){
+  bool operator<=(const jobNode& otherNode){
     
-    int diffKey = readKey() - newNode.readKey();
+    int diffKey = readKey() - otherNode.readKey();
 
     if(diffKey < 0)
       return true;
     else if(diffKey > 0)
       return false;
     else if(diffKey == 0)
-      return (readWeight() < newNode.readWeight());
+      return (readWeight() <= otherNode.readWeight());
+  }// end of operator < 
+
+
+  bool operator<(const jobNode& otherNode){
+    
+    int diffKey = readKey() - otherNode.readKey();
+
+    if(diffKey < 0)
+      return true;
+    else if(diffKey > 0)
+      return false;
+    else if(diffKey == 0)
+      return (readWeight() < otherNode.readWeight());
   }// end of operator < 
   
-  bool operator>(const jobNode& newNode){
+  bool operator>=(const jobNode& otherNode){
     
-    int diffKey = readKey() - newNode.readKey();
+    int diffKey = readKey() - otherNode.readKey();
 
     if(diffKey > 0)
       return true;
     else if(diffKey < 0)
       return false;
     else if(diffKey == 0)
-      return (readWeight() > newNode.readWeight());
-  }// end of operator < 
+      return (readWeight() >= otherNode.readWeight());
+  }// end of operator > 
+
+
+  bool operator>(const jobNode& otherNode){
+    
+    int diffKey = readKey() - otherNode.readKey();
+
+    if(diffKey > 0)
+      return true;
+    else if(diffKey < 0)
+      return false;
+    else if(diffKey == 0)
+      return (readWeight() > otherNode.readWeight());
+  }// end of operator > 
   
   
   friend std::ostream &operator<<(std::ostream &output,

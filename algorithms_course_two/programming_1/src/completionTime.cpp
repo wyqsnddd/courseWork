@@ -3,6 +3,7 @@
 # include <iostream>
 # include <stdlib.h>
 # include "sampleHeap.h" 
+# include "jobNode.h"
 // # include "temp.cpp"
 int main(int argc, char ** argv ){
 
@@ -62,7 +63,8 @@ std::string inputFile("../data/jobs.txt");
  iss>>jobNumber;  
  std::cout<<"The number of jobs are: "<<jobNumber<<std::endl;
   
- int inputArray [jobNumber];
+ // int inputArray [jobNumber];
+ jobNode inputArray [jobNumber];
 
  while(std::getline(integerReader, line)){
    std::istringstream iss(line);
@@ -70,19 +72,27 @@ std::string inputFile("../data/jobs.txt");
    iss>>weight;
    iss>>length;
     
-   //   std::cout<<"Getting weight: "<<weight<<"length: "<<length<<std::endl;
+     std::cout<<"Getting weight: "<<weight<<", length: "<<length<<std::endl;
    int difference = weight - length;
-   inputArray[counter] = difference;
+   // inputArray[counter] = difference;
+   inputArray[counter] = jobNode(weight, length);
    counter++;
     
  }// end of while 	
 
  if(counter==jobNumber){
-   sampleMinHeap <int>  jobHeap(counter, inputArray);
+   // sampleMinHeap <int>  jobHeap(counter, inputArray);
+   sampleMinHeap <jobNode>  jobHeap(counter, inputArray);
    std::cout<<"Created min heap."<<std::endl;
+   std::cout<<"Indeed created min heap."<<std::endl;
+   std::cout<<"The heap size is: "<<jobHeap.size()<<std::endl;
+   std::cout<<"The min value is: "<<jobHeap.readMin()<<std::endl;
+
    jobHeap.printOut();
-   sampleMaxHeap <int>  jobHeap2(counter, inputArray);
-   std::cout<<"Created min heap."<<std::endl;
+
+   // sampleMaxHeap <int>  jobHeap2(counter, inputArray);
+   sampleMaxHeap <jobNode>  jobHeap2(counter, inputArray);
+   std::cout<<"Created max heap."<<std::endl;
    jobHeap2.printOut();
 
 

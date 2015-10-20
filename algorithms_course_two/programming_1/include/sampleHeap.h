@@ -198,10 +198,10 @@ template<class a_type> class sampleMinHeap{
     
   }
   void printOut(){
-    std::cout<<"The heap is: ";
+    std::cout<<"The heap is: "<<std::endl;
     
     while(size()!=0){
-      std::cout<<extractMin()<<" ";
+      std::cout<<extractMin()<<" "<<std::endl;
     }
 
     std::cout<<"from min to max. "<<std::endl;
@@ -452,10 +452,10 @@ template<class a_type> class sampleMaxHeap{
     
   }
   void printOut(){
-    std::cout<<"The heap is: ";
+    std::cout<<"The heap is: "<<std::endl;
     
     while(size()!=0){
-      std::cout<<extractMax()<<" ";
+      std::cout<<extractMax()<<" "<<std::endl;
     }
 
     std::cout<<"from max to min. "<<std::endl;

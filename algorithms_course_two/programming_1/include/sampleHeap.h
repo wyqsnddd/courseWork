@@ -257,7 +257,12 @@ template<class a_type> class sampleMinHeap{
     }
     
     if(size()>0){
-      
+
+      /*    if ( value in replacement node < its parent node ) */
+      /*       Filter the replacement node UP the binary tree */
+      /*    else */
+      /*       Filter the replacement node DOWN the binary tree */
+
       // bubble up or bubble down? 
       int smallerIndex = miner(index, parentIndex(index));
       if(smallerIndex==index){

@@ -119,14 +119,16 @@ int main(int argc, char ** argv )
       std::istringstream iss(line);
       int head(0);
       int tail(0);
+      int cost(0);
       iss>>tail;
       iss>>head;
+      iss>>cost;
       std::cout<<"We are reading, tail: "<<tail<<", head: "<<head<<std::endl;
       int tailHash = G.readOriginalNode(tail);
       int headHash = G.readOriginalNode(head);
 	  
       std::cout<<"We are setting, tail: "<<tailHash<<", head: "<<headHash<<std::endl;
-      G.addEdge(tailHash, headHash);	
+      G.addEdge(tailHash, headHash, cost);	
       // G.addEdge(tail -1 , head -1);	
 
     }

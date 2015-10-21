@@ -14,7 +14,7 @@ private:
   int nN_;
   int nE_;
   // sampleBag <int> ** adj;
-   sampleBag <int>  **adj;
+  sampleBag <int>  **adj;
   // sampleBag <a_type>  **adj;
   std::map<int, int> *hashTableInt;
   bool hashSet_;
@@ -51,6 +51,8 @@ public:
     std::cout<<"initialized with "<<N<<" Nodes. "<<std::endl;
   }
   ~sampleGraph(){
+    free(hashTableInt);
+    delete [] adj;
   }  
   int readOriginalNode(int key ) {
     std::map<int, int>::iterator keyIterator = hashTableInt->find(key);
@@ -95,7 +97,7 @@ public:
   }
   
   
-   sampleBag <int>  * getNodeEdge(int n){
+  sampleBag <int>  * getNodeEdge(int n){
     return adj[n];
   }  
 

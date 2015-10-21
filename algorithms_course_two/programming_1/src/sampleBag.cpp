@@ -39,7 +39,7 @@ public:
       return false;
   }
 
-  int getSize(){
+  int getSize() {
     return n_;
   }
   a_type getLast(){

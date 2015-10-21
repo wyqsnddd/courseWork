@@ -80,20 +80,28 @@ std::string inputFile("../data/jobs.txt");
     
  }// end of while 	
 
+
  if(counter==jobNumber){
    // sampleMinHeap <int>  jobHeap(counter, inputArray);
-   // sampleMinHeap <jobNode>  jobHeap(counter, inputArray);
-   // std::cout<<"Created min heap."<<std::endl;
-   // std::cout<<"Indeed created min heap."<<std::endl;
+   sampleMinHeap <jobNode>  jobHeap(counter, inputArray);
+   std::cout<<"Created min heap."<<std::endl;
+   // // std::cout<<"Indeed created min heap."<<std::endl;
    // std::cout<<"The heap size is: "<<jobHeap.size()<<std::endl;
    // std::cout<<"The min value is: "<<jobHeap.readMin()<<std::endl;
+   
+   jobHeap.printOut();
+   
+   sampleMinHeap <jobNode>  jobHeapTest(counter, inputArray);
+      
+   jobHeapTest.deleteElement(2);
+   jobHeapTest.deleteElement(3);
+   jobHeapTest.deleteElement(6);
+   jobHeapTest.deleteElement(4);
+   jobHeapTest.printOut();
 
-   // jobHeap.printOut();
-
-   // sampleMaxHeap <int>  jobHeap2(counter, inputArray);
    sampleMaxHeap <jobNode>  jobHeap2(counter, inputArray);
    std::cout<<"Created max heap."<<std::endl;
-   // jobHeap2.printOut();
+   jobHeap2.printOut();
    
    long waitingTime = 0;
    int clockTime = 0;

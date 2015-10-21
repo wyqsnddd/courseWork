@@ -12,7 +12,6 @@ template<class a_type> class sampleMinHeap{
   int size_; 
   
   a_type * array_;
-
   int parentIndex( int child){
     // if(child%2 == 0){
     //   return child/2;
@@ -21,6 +20,50 @@ template<class a_type> class sampleMinHeap{
     // }
     return child/2;// This is floor operation anyway. 
   }
+  void bubbleDown(int dataIndex){
+      // // bubble down.
+      int currentIndex = dataIndex;
+      //      std::cout<<"root: "<<array_[rootIndex_]<<std::endl;
+
+      //      std::cout<<"currentIndex: "<<currentIndex<<std::endl;
+      int status = 0;
+      while(!properHeapNode(currentIndex, status)){
+	int smallerChild = 0;
+	switch(status){
+	case 0:
+	  /* std::cout<<"INFO: proper node and no child left "<<std::endl; */
+	  break;
+	case 2: //right 
+	  smallerChild = currentIndex*2 + 1;
+	  break;
+	case 4: //left 
+	  smallerChild = currentIndex*2;
+	  break;
+	case 6: //left 
+	  smallerChild = miner(currentIndex*2, currentIndex*2 + 1);
+	  break;
+	default:
+	  std::cout<<"ERROR: "<<std::endl;
+	}
+	//	int smallerChild = miner(currentIndex*2, currentIndex*2 + 1);
+	//	std::cout<<"smallerChild calculated: "<<smallerChild<<", currentIndex: "<<currentIndex<<std::endl;
+	swap(currentIndex, smallerChild);
+	currentIndex = smallerChild;
+	//	std::cout<<"smallerChild calculated: "<<smallerChild<<", currentIndex: "<<currentIndex<<std::endl;
+
+      }// end of while
+
+  }
+  void bubbleUp(int dataIndex){
+    int parent = 0;
+    parent = parentIndex(dataIndex);
+    while(array_[dataIndex] < array_[parent] ){
+      swap(dataIndex, parent);
+      dataIndex = parent;
+      parent = parentIndex(dataIndex);
+    }
+
+  }// end of bubbleUp
   int swap(int a, int b){
     a_type temp = array_[b];
     array_[b] = array_[a];
@@ -85,33 +128,36 @@ template<class a_type> class sampleMinHeap{
     }
   }
 
-  void heapify(a_type inputArray [], int index){
-    int currentIndex = index;
-    int status = 0;
-    while(!properHeapNode(currentIndex, status)){
-      int smallerChild = 0;
-      switch(status){
-      case 0:
-	std::cout<<"ERROR: proper node and no child left "<<std::endl;
-	break;
-      case 2: //right 
-	smallerChild = currentIndex*2 + 1;
-	break;
-      case 4: //left 
-	smallerChild = currentIndex*2;
-	break;
-      case 6: //left 
-	smallerChild = miner(currentIndex*2, currentIndex*2 + 1);
-	break;
-      default:
-	std::cout<<"ERROR: "<<std::endl;
-      }// end of switch
 
-      swap(currentIndex, smallerChild);
-      currentIndex = smallerChild;
-    } // end of while 
 
-  }
+  /* void heapify(a_type inputArray [], int index){ */
+  /* void heapify(int index){ */
+  /*   int currentIndex = index; */
+  /*   int status = 0; */
+  /*   while(!properHeapNode(currentIndex, status)){ */
+  /*     int smallerChild = 0; */
+  /*     switch(status){ */
+  /*     case 0: */
+  /* 	std::cout<<"ERROR: proper node and no child left "<<std::endl; */
+  /* 	break; */
+  /*     case 2: //right  */
+  /* 	smallerChild = currentIndex*2 + 1; */
+  /* 	break; */
+  /*     case 4: //left  */
+  /* 	smallerChild = currentIndex*2; */
+  /* 	break; */
+  /*     case 6: //left  */
+  /* 	smallerChild = miner(currentIndex*2, currentIndex*2 + 1); */
+  /* 	break; */
+  /*     default: */
+  /* 	std::cout<<"ERROR: "<<std::endl; */
+  /*     }// end of switch */
+
+  /*     swap(currentIndex, smallerChild); */
+  /*     currentIndex = smallerChild; */
+  /*   } // end of while  */
+
+  /* } */
  public:
   sampleMinHeap(int size, a_type inputArray []){
     size_ = size;
@@ -125,7 +171,8 @@ template<class a_type> class sampleMinHeap{
 
     // build heap
     for(int i = size/2; i>-1 ; i--){
-      heapify(array_, i);
+      //      heapify(i);
+      bubbleDown(i);
     }
 
 
@@ -183,20 +230,45 @@ template<class a_type> class sampleMinHeap{
 
       size_++;
 
-      int parent = 0;
       int dataIndex = getEnd();
-      
-      parent = parentIndex(dataIndex);
-      // bubble up
-      while(array_[dataIndex] < array_[parent] ){
-	swap(dataIndex, parent);
-	dataIndex = parent;
-	parent = parentIndex(dataIndex);
-      }
+      bubbleUp(dataIndex);
+      /* int dataIndex = getEnd(); */
+      /* int parent = 0; */
+      /* parent = parentIndex(dataIndex); */
+      /* // bubble up */
+      /* while(array_[dataIndex] < array_[parent] ){ */
+      /* 	swap(dataIndex, parent); */
+      /* 	dataIndex = parent; */
+      /* 	parent = parentIndex(dataIndex); */
+      /* } */
       //      std::cout<<"insert: "<<data<<" at: "<<dataIndex<<std::endl;
     }
     
   }
+  void deleteElement(int index){
+    if(!isEmpty()){
+      
+      array_[index] = array_[endIndex_];
+
+      if(!isOne())
+	endIndex_--;
+
+      size_--;
+    }
+    
+    if(size()>0){
+      
+      // bubble up or bubble down? 
+      int smallerIndex = miner(index, parentIndex(index));
+      if(smallerIndex==index){
+	bubbleUp(index);
+      }else{
+	bubbleDown(index);
+      }
+    }  
+
+  }
+
   void printOut(){
     std::cout<<"The heap is: "<<std::endl;
     
@@ -222,38 +294,7 @@ template<class a_type> class sampleMinHeap{
     //       std::cout<<"delete root"<<std::endl;
     if(size()>0){
       // // bubble down.
-      int currentIndex = getRoot();
-      //      std::cout<<"root: "<<array_[rootIndex_]<<std::endl;
-
-      //      std::cout<<"currentIndex: "<<currentIndex<<std::endl;
-      int status = 0;
-      while(!properHeapNode(currentIndex, status)){
-	int smallerChild = 0;
-	switch(status){
-	case 0:
-	  std::cout<<"ERROR: proper node and no child left "<<std::endl;
-	  break;
-	case 2: //right 
-	  smallerChild = currentIndex*2 + 1;
-	  break;
-	case 4: //left 
-	  smallerChild = currentIndex*2;
-	  break;
-	case 6: //left 
-	  smallerChild = miner(currentIndex*2, currentIndex*2 + 1);
-	  break;
-	default:
-	  std::cout<<"ERROR: "<<std::endl;
-	}
-
-	
-	//	int smallerChild = miner(currentIndex*2, currentIndex*2 + 1);
-	//	std::cout<<"smallerChild calculated: "<<smallerChild<<", currentIndex: "<<currentIndex<<std::endl;
-	swap(currentIndex, smallerChild);
-	currentIndex = smallerChild;
-	//	std::cout<<"smallerChild calculated: "<<smallerChild<<", currentIndex: "<<currentIndex<<std::endl;
-
-      }// end of while
+      bubbleDown(getRoot());
     }  
     // std::cout<<std::endl;
     // std::cout<<std::endl;
@@ -347,7 +388,7 @@ template<class a_type> class sampleMaxHeap{
       int biggerChild = 0;
       switch(status){
       case 0:
-	std::cout<<"ERROR: proper node and no child left "<<std::endl;
+	/* std::cout<<"ERROR: proper node and no child left "<<std::endl; */
 	break;
       case 2: //right 
 	biggerChild = currentIndex*2 + 1;
@@ -439,15 +480,15 @@ template<class a_type> class sampleMaxHeap{
 
       int parent = 0;
       int dataIndex = getEnd();
-      
+      // bubble up      
+      //      bubbleUp(dataIndex);
       parent = parentIndex(dataIndex);
-      // bubble up
       while(array_[dataIndex] > array_[parent] ){
-	swap(dataIndex, parent);
-	dataIndex = parent;
-	parent = parentIndex(dataIndex);
+      	swap(dataIndex, parent);
+      	dataIndex = parent;
+      	parent = parentIndex(dataIndex);
       }
-      //      std::cout<<"insert: "<<data<<" at: "<<dataIndex<<std::endl;
+           std::cout<<"insert: "<<data<<" at: "<<dataIndex<<std::endl;
     }
     
   }
@@ -493,7 +534,7 @@ template<class a_type> class sampleMaxHeap{
 	int biggerChild = 0;
 	switch(status){
 	case 0:
-	  std::cout<<"ERROR: proper node and no child left "<<std::endl;
+	  /* std::cout<<"ERROR: proper node and no child left "<<std::endl; */
 	  break;
 	case 2: //right 
 	  biggerChild = currentIndex*2 + 1;
@@ -559,6 +600,38 @@ template<class a_type> class sampleMaxHeap{
 
 //   a.printOut();
 
+  /* sampleMinHeap <int>  b(50); */
+  /* b.insert(1); */
+  /* b.insert(10); */
+  /* b.insert(11); */
+  /* b.insert(13); */
+  /* b.insert(14); */
+  /* b.insert(11); */
+  /* b.insert(2); */
+  /* b.insert(121); */
+  /* b.insert(191); */
+  /* b.insert(211); */
+  /* b.insert(1); */
+  /* b.insert(1); */
+  /* b.insert(11); */
+  /* b.insert(3); */
+  /* b.insert(5); */
+  /* b.insert(2); */
+  /* b.insert(1110); */
+  
+  /* b.deleteElement(2); */
+  /* b.deleteElement(3); */
+  /* b.deleteElement(8); */
+  /* b.deleteElement(7); */
+  /* b.deleteElement(3); */
+  /* b.deleteElement(4); */
+  /* b.deleteElement(2); */
+  
+  /* std::cout<<"The heap size is: "<<b.size()<<std::endl; */
+  /* std::cout<<"last  is: "<<b.getEnd()<<std::endl; */
+  /* std::cout<<"root  is: "<<b.getRoot()<<std::endl; */
+
+  /* b.printOut(); */
 
 //   sampleMaxHeap <int>  b(50);
 //   b.insert(1);

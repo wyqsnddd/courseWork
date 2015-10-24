@@ -276,6 +276,7 @@ int bubbleDown(int dataIndex){
  }
  public:
 std::map<int, int>  nodeHeapMap_;
+/* std::multimap<int, int>  nodeHeapMap_; */
  /* graphMinHeap(int size, a_type inputArray []){ */
  /*   size_ = size; */
  /*   capacity_ = size; */
@@ -329,24 +330,55 @@ std::map<int, int>  nodeHeapMap_;
  bool  isEmpty() const{
    return size_ == 0;
  }
-  
+ bool dataOnHeap(a_type data){
+   std::map<int,int>::iterator itHeap;
+   itHeap = nodeHeapMap_.find(data.readNodeNumber());
+   return (itHeap!=nodeHeapMap_.end());
+ }  
+int replaceData(a_type data){
+   // assume the node is already on the heap and heap map
+   std::map<int,int>::iterator itHeap;
+   itHeap = nodeHeapMap_.find(data.readNodeNumber());
+
+   if(data.readKey()<readElement(itHeap->second).readKey()){
+     // (0) delete on the heap 
+     /* std::cout<<"delete node: "<<data.readNodeNumber()<<std::endl; */
+     /* testPrintHeap(); */
+     deleteElement(itHeap->second);
+     // (1) insert again
+
+     /* std::cout<<"insert node: "<<data.readNodeNumber()<<" with key: "<<data.readKey()<<std::endl; */
+     return insert(data);
+   }else{
+     /* std::cout<<"No need to replace"<<std::endl; */
+     return itHeap->second;
+   }
+ }
  int insert(a_type data){
    if(isEmpty()){
+     // Don't need to do collision check as the heap is empty
      metaInsertion(data);
      /* array_[endIndex_] = data;      */
      /* size_++; */
    return endIndex_;
    }
    if(!isFull()){
-     // insert 
-     endIndex_++;
+     // collision check
+     if(dataOnHeap(data)){
+       /* std::cout<<"Error ====================================================================================="<<std::endl; */
+       return replaceData(data);
+     }else{
+       // the node is not yet on the heap
+       // insert 
+       endIndex_++;
 
-     /* array_[endIndex_] = data;      */
-     /* size_++; */
-     metaInsertion(data);
+       /* array_[endIndex_] = data;      */
+       /* size_++; */
+       metaInsertion(data);
 
-     int dataIndex = getEnd();
-     return bubbleUp(dataIndex);
+       int dataIndex = getEnd();
+       return bubbleUp(dataIndex);
+     }
    }
     
  }

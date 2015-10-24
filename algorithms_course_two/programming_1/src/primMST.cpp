@@ -188,7 +188,7 @@ int main(int argc, char ** argv )
 			 sourceNodeEdgePointer->iterator->length);// cost 
 
      int newHeapDataIndex = freeVertexHeap.insert(newVertex);
-     // std::cout<<"Insert (heap) node "<<newVertex.readNodeNumber()<<" with cost: "<<newVertex.readKey()<<" at "<<newHeapDataIndex<<" of the heap."<<std::endl;
+     // std::cout<<"Insert (heap) node "<<newVertex.readNodeNumber()<<" with cost: "<<freeVertexHeap.readElement(newHeapDataIndex).readKey()<<" at "<<newHeapDataIndex<<" of the heap."<<std::endl;
 
 
      // Key, value
@@ -202,7 +202,8 @@ int main(int argc, char ** argv )
      // 	      <<", sits at: "<<newHeapDataIndex<<" of the heap."<<std::endl;
    }
 
-   // freeVertexHeap.printOut();
+  // freeVertexHeap.testPrintHeap();
+  // freeVertexHeap.testPrintHeapMap();
    
   // construct the heap using "vertex nodes in the tree" 
 

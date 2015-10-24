@@ -51,7 +51,10 @@ public:
     std::cout<<"initialized with "<<N<<" Nodes. "<<std::endl;
   }
   ~sampleGraph(){
-    free(hashTableInt);
+    if(hashSet()){
+      free(hashTableInt);
+    }
+
     delete [] adj;
   }  
   int readOriginalNode(int key ) {
@@ -89,7 +92,10 @@ public:
   void printGraph(){
 
     std::cout<<"Graph:"<<std::endl;
-    for(int i = 0; i < nN_; i++){
+
+    
+    for(int i = 0; i < getNumberOfNodes(); i++){
+      //      std::cout<<"The graph has: "<<getNumberOfNodes()<<" nodes and "<<getNumberOfEdges()<<std::endl;
       std::cout<<"Node "<<i<<": ";
       adj[i]->printBag();
     }

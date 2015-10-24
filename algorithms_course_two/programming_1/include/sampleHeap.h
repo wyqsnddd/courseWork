@@ -20,7 +20,7 @@ template<class a_type> class sampleMinHeap{
     // }
     return child/2;// This is floor operation anyway. 
   }
-  void bubbleDown(int dataIndex){
+  int bubbleDown(int dataIndex){
       // // bubble down.
       int currentIndex = dataIndex;
       //      std::cout<<"root: "<<array_[rootIndex_]<<std::endl;
@@ -52,9 +52,9 @@ template<class a_type> class sampleMinHeap{
 	//	std::cout<<"smallerChild calculated: "<<smallerChild<<", currentIndex: "<<currentIndex<<std::endl;
 
       }// end of while
-
+      return currentIndex;
   }
-  void bubbleUp(int dataIndex){
+  int bubbleUp(int dataIndex){
     int parent = 0;
     parent = parentIndex(dataIndex);
     while(array_[dataIndex] < array_[parent] ){
@@ -62,7 +62,7 @@ template<class a_type> class sampleMinHeap{
       dataIndex = parent;
       parent = parentIndex(dataIndex);
     }
-
+    return dataIndex;
   }// end of bubbleUp
   int swap(int a, int b){
     a_type temp = array_[b];
@@ -210,18 +210,18 @@ template<class a_type> class sampleMinHeap{
     return rootIndex_;
   }
 
-  bool  isFull(){
+  bool  isFull() const{
     return size_ == capacity_;
   }
-  bool  isEmpty(){
+  bool  isEmpty() const{
     return size_ == 0;
   }
   
-  void insert(a_type data){
+  int insert(a_type data){
     if(isEmpty()){
       array_[endIndex_] = data;     
       size_++;
-      return;
+      return endIndex_;
     }
     if(!isFull()){
       // insert 
@@ -231,7 +231,7 @@ template<class a_type> class sampleMinHeap{
       size_++;
 
       int dataIndex = getEnd();
-      bubbleUp(dataIndex);
+      return bubbleUp(dataIndex);
       /* int dataIndex = getEnd(); */
       /* int parent = 0; */
       /* parent = parentIndex(dataIndex); */
@@ -245,6 +245,12 @@ template<class a_type> class sampleMinHeap{
     }
     
   }
+  a_type readElement(int index){
+    int status(0);
+    if(properHeapNode(index, status)){
+      return  array_[index];
+    }
+  }// end of readElement
   void deleteElement(int index){
     if(!isEmpty()){
       
@@ -283,7 +289,7 @@ template<class a_type> class sampleMinHeap{
 
     std::cout<<"from min to max. "<<std::endl;
   }
-  a_type readMin(){
+  a_type readMin() const{
     return array_[rootIndex_];
 
   }

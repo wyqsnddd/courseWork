@@ -515,7 +515,7 @@ template<class a_type> class sampleMaxHeap{
   void printTest(){
     std::cout<<"The heap is: ";
     
-    for(int i = 0; i< 8; i++){
+    for(int i = 0; i< size(); i++){
       std::cout<<array_[i]<<" ";
     }
 

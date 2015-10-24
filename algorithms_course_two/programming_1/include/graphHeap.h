@@ -19,30 +19,14 @@ a_type * array_;
  int parentIndex( int child){
   return child/2;// This is floor operation anyway. 
 }
-/* void heapMapDeletion(int index){ */
-/*   // Delete the information in the heap */
-/*   std::cout<<"Size of the heapMap is: "<<nodeHeapMap_.size()<<std::endl; */
-/*   testPrintHeap();   */
-/*   testPrintHeapMap(); */
-/*   int nodeNumber = readElement(index).readNodeNumber(); */
-/*   std::cout<<"delete node "<<nodeNumber<<" from the heap"<<std::endl; */
-/*   std::map<int,int>::iterator itHeap; */
-/*   itHeap = nodeHeapMap_.find(nodeNumber); */
-/*   if(itHeap==nodeHeapMap_.end()){ */
-/*     std::cout<<"Error: the node: "<< nodeNumber<<" to be deleted is not on the heapMap."<<std::endl; */
-/*   }else{ */
-/*     nodeHeapMap_.erase(itHeap); */
-/*   } */
-/*   /\* nodeHeapMap_.erase(nodeHeapMap_.find(nodeNumber)); *\/ */
-
-/* } */
  void heapMapDeletion(int index){
   /* std::cout<<"Size of the heapMap is: "<<nodeHeapMap_.size()<<std::endl; */
 
   /* testPrintHeap();   */
   /* testPrintHeapMap(); */
   // (1) Erase the old root from the heap
-  int nodeNumber = readElement(index).readNodeNumber();
+   //  int nodeNumber = readElement(index).readNodeNumber();
+  int nodeNumber = readElement(index).readNodeTwo();
   /* std::cout<<"delete node "<<nodeNumber<<" from the heap map"<<std::endl; */
   std::map<int,int>::iterator itHeap;
   itHeap = nodeHeapMap_.find(nodeNumber);
@@ -65,7 +49,8 @@ a_type * array_;
       /* testPrintHeapMap(); */
 
 
-      int nodeNumberEnd = readElement(getEnd()).readNodeNumber();
+      //      int nodeNumberEnd = readElement(getEnd()).readNodeNumber();
+      int nodeNumberEnd = readElement(getEnd()).readNodeTwo();
       /* std::cout<<"the end element is node "<<nodeNumberEnd<<std::endl;   */
       /* nodeHeapMap_.erase(nodeHeapMap_.find(nodeNumber)); */
       nodeHeapMap_.erase(nodeHeapMap_.find(nodeNumberEnd));
@@ -82,7 +67,8 @@ a_type * array_;
   /* testPrintHeap();   */
   /* testPrintHeapMap(); */
   // (1) Erase the old root from the heap
-  int nodeNumber = readElement(getRoot()).readNodeNumber();
+   //  int nodeNumber = readElement(getRoot()).readNodeNumber();
+  int nodeNumber = readElement(getRoot()).readNodeTwo();
   /* std::cout<<"delete node "<<nodeNumber<<" from the heap map"<<std::endl; */
   std::map<int,int>::iterator itHeap;
   itHeap = nodeHeapMap_.find(nodeNumber);
@@ -96,7 +82,8 @@ a_type * array_;
   // (2) Replace the root with the last element; 
   if(nodeHeapMap_.size()!=0){
 
-    int nodeNumberEnd = readElement(getEnd()).readNodeNumber();
+    //    int nodeNumberEnd = readElement(getEnd()).readNodeNumber();
+    int nodeNumberEnd = readElement(getEnd()).readNodeTwo();
     /* nodeHeapMap_.erase(nodeHeapMap_.find(nodeNumber)); */
     nodeHeapMap_.erase(nodeHeapMap_.find(nodeNumberEnd));
     nodeHeapMap_.insert(
@@ -114,11 +101,13 @@ void heapMapSwap(int a, int b){
 
      int nodeNumberA = 0;
 
-     nodeNumberA = readElement(a).readNodeNumber();
+     //     nodeNumberA = readElement(a).readNodeNumber();
+     nodeNumberA = readElement(a).readNodeTwo();
 
      int nodeNumberB = 0;
 
-     nodeNumberB = readElement(b).readNodeNumber();
+     //     nodeNumberB = readElement(b).readNodeNumber();
+     nodeNumberB = readElement(b).readNodeTwo();
 
      
      /* std::cout<<"heapMap(size:"<<nodeHeapMap_.size()<<") swap node: "<<nodeNumberA<<"(index:"<<a<<") and node "<<nodeNumberB<<"(index:"<<b<<")."<<std::endl; */
@@ -144,7 +133,8 @@ void heapMapSwap(int a, int b){
    array_[endIndex_] = data;     
    size_++;
    nodeHeapMap_.insert(
-   		       std::pair<int, int>(data.readNodeNumber(),// Key: node number
+		       //   		       std::pair<int, int>(data.readNodeNumber(),// Key: node number
+   		       std::pair<int, int>(data.readNodeTwo(),// Key: node number
    					   endIndex_)// Value: Position on the heap
    		       );
    /* std::cout<<"meta heap insertion node("<<data.readNodeNumber()<<") at ("<<endIndex_<<")DONE"<<std::endl; */
@@ -276,33 +266,13 @@ int bubbleDown(int dataIndex){
  }
  public:
 std::map<int, int>  nodeHeapMap_;
-/* std::multimap<int, int>  nodeHeapMap_; */
- /* graphMinHeap(int size, a_type inputArray []){ */
- /*   size_ = size; */
- /*   capacity_ = size; */
- /*   array_ = new a_type [size]; */
- /*   for(int i = 0; i<size; i++){ */
- /*     array_[i] = inputArray[i]; */
- /*   } */
- /*   rootIndex_ = 0; */
- /*   endIndex_ = size_ - 1; */
-
- /*   // build heap */
- /*   for(int i = size/2; i>-1 ; i--){ */
- /*     bubbleDown(i); */
- /*   } */
-
-
- /* } */
-
  graphMinHeap(int size){
 
    size_ = 0;
    capacity_ = size;
    array_ = new a_type [size];
-   //    a_type max = std::numeric_limits<a_type>::max();
+
    for(int i = 0; i<size; i++){
-     //      array_[i] = max;
      array_[i] = std::numeric_limits<a_type>::max();
    }
     
@@ -332,13 +302,15 @@ std::map<int, int>  nodeHeapMap_;
  }
  bool dataOnHeap(a_type data){
    std::map<int,int>::iterator itHeap;
-   itHeap = nodeHeapMap_.find(data.readNodeNumber());
+   //   itHeap = nodeHeapMap_.find(data.readNodeNumber());
+   itHeap = nodeHeapMap_.find(data.readNodeTwo());
    return (itHeap!=nodeHeapMap_.end());
  }  
 int replaceData(a_type data){
    // assume the node is already on the heap and heap map
    std::map<int,int>::iterator itHeap;
-   itHeap = nodeHeapMap_.find(data.readNodeNumber());
+   //   itHeap = nodeHeapMap_.find(data.readNodeNumber());
+   itHeap = nodeHeapMap_.find(data.readNodeTwo());
 
    if(data.readKey()<readElement(itHeap->second).readKey()){
      // (0) delete on the heap 
@@ -436,7 +408,7 @@ int replaceData(a_type data){
    std::cout<<"The heap is: "<<std::endl;
     
    for(int i = 0; i < size(); i++){
-     std::cout<<array_[i]<<std::endl;
+     std::cout<<"Index "<<i<<": "<<array_[i]<<std::endl;
    }
    std::cout<<"from min to max. "<<std::endl;
  }
@@ -501,6 +473,18 @@ int replaceData(a_type data){
    itHeap = nodeHeapMap_.find(nodeNumber);
    // return the node index in the heap
    return itHeap->second;
+ }
+ bool properHeap(){
+   if(size()>1){
+     for(int i = size()/2; i>-1 ; i--){
+       int status(0);
+       if(!properHeapNode(i, status)){
+	 std::cout<<"Error: not proper heap"<<std::endl;
+	 return false;
+       }
+     }
+   }
+   return true;
  }
  
 };

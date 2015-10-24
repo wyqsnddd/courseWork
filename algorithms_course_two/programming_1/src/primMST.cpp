@@ -3,7 +3,7 @@
 # include "graphHeap.h"
 # include "vertexNode.h"
 # include "sampleGraph.cpp"
-
+# include "metaEdge.h"
 
 int main(int argc, char ** argv )
 {
@@ -12,7 +12,7 @@ int main(int argc, char ** argv )
   std::string inputFile("../data/edges.txt"); 
   int sourceNode(0);
   if(argc == 5){    
-     std::stringstream argumentSS(argv[1]);
+    std::stringstream argumentSS(argv[1]);
     std::string param;
     std::string paramContainer;
 
@@ -119,26 +119,26 @@ int main(int argc, char ** argv )
 
   // std::getline(graphReader, line);
   // if(G.hashSet()){
-    while(std::getline(graphReader, line)){
-      std::cout<<"----------------"<<std::endl;
+  while(std::getline(graphReader, line)){
+    std::cout<<"----------------"<<std::endl;
   
-      std::istringstream iss(line);
-      int head(0);
-      int tail(0);
-      int cost(0);
-      iss>>tail;
-      iss>>head;
-      iss>>cost;
-      // std::cout<<"We are reading, tail: "<<tail<<", head: "<<head<<std::endl;
-      // int tailHash = G.readOriginalNode(tail);
-      // int headHash = G.readOriginalNode(head);
+    std::istringstream iss(line);
+    int head(0);
+    int tail(0);
+    int cost(0);
+    iss>>tail;
+    iss>>head;
+    iss>>cost;
+    // std::cout<<"We are reading, tail: "<<tail<<", head: "<<head<<std::endl;
+    // int tailHash = G.readOriginalNode(tail);
+    // int headHash = G.readOriginalNode(head);
 	  
-      // std::cout<<"We are setting, tail: "<<tailHash<<", head: "<<headHash<<std::endl;
-      // G.addEdge(tailHash, headHash, cost);	
-      G.addEdge(tail -1 , head -1, cost);	
-      G.addEdge(head -1 , tail -1, cost);	
+    // std::cout<<"We are setting, tail: "<<tailHash<<", head: "<<headHash<<std::endl;
+    // G.addEdge(tailHash, headHash, cost);	
+    G.addEdge(tail -1 , head -1, cost);	
+    G.addEdge(head -1 , tail -1, cost);	
 
-    }
+  }
   // }else{
   //   std::cout<<"hash table is not set."<<std::endl;
   //   exit(0);
@@ -146,6 +146,7 @@ int main(int argc, char ** argv )
   graphReader.close();
 
   if(G.getNumberOfEdges()!=2*numberOfEdges){
+    // if(G.getNumberOfEdges()!=numberOfEdges){
     std::cout<<"Number of edges mismatch!"<<std::endl;
     std::cout<<"Graph has: "<<G.getNumberOfEdges()<<" edges."<<std::endl;
     std::cout<<"We    got: "<<numberOfEdges<<" edges."<<std::endl;
@@ -164,7 +165,8 @@ int main(int argc, char ** argv )
   
   // vertex nodes in the heap
   // sampleMinHeap <vertexNode>  freeVertexHeap(numberOfNodes-1);
-  graphMinHeap <vertexNode>  freeVertexHeap(numberOfNodes-1);
+  //  graphMinHeap <vertexNode>  freeVertexHeap(numberOfNodes-1);
+  graphMinHeap <metaEdge>  freeEdgeHeap(numberOfNodes-1);
   // std::map<int, int>  freeVertexHeapMap;
   // initialize the heap 
   if((sourceNode<0)
@@ -181,26 +183,33 @@ int main(int argc, char ** argv )
   for(sourceNodeEdgePointer->iterator = sourceNodeEdgePointer->getFirst();
       sourceNodeEdgePointer->iterator!=NULL; 
       sourceNodeEdgePointer->iterator = sourceNodeEdgePointer->iterator->next){
-     // Insert the other node into the heap 
-     // The key will be the edge cost
+    // Insert the other node into the heap 
+    // The key will be the edge cost
     // std::cout<<"node "<<sourceNodeEdgePointer->iterator->node<<", length: "<<sourceNodeEdgePointer->iterator->length<<std::endl;
-    vertexNode newVertex(sourceNodeEdgePointer->iterator->node,   // node number
-			 sourceNodeEdgePointer->iterator->length);// cost 
+    // vertexNode newVertex(sourceNodeEdgePointer->iterator->node,   // node number
+    // 			 sourceNodeEdgePointer->iterator->length);// cost 
+    metaEdge newEdge(sourceNode,// node number one
+		     sourceNodeEdgePointer->iterator->node,   // node number two
+		     sourceNodeEdgePointer->iterator->length);// cost 
 
-     int newHeapDataIndex = freeVertexHeap.insert(newVertex);
-     // std::cout<<"Insert (heap) node "<<newVertex.readNodeNumber()<<" with cost: "<<freeVertexHeap.readElement(newHeapDataIndex).readKey()<<" at "<<newHeapDataIndex<<" of the heap."<<std::endl;
+    // int newHeapDataIndex = freeVertexHeap.insert(newVertex);
+    int newHeapDataIndex = freeEdgeHeap.insert(newEdge);
+    if(!freeEdgeHeap.properHeap()){
+      freeEdgeHeap.testPrintHeap();
+    }
+    // std::cout<<"Insert (heap) node "<<newVertex.readNodeNumber()<<" with cost: "<<freeVertexHeap.readElement(newHeapDataIndex).readKey()<<" at "<<newHeapDataIndex<<" of the heap."<<std::endl;
 
 
-     // Key, value
-     // freeVertexHeapMap.insert(
-     // 			      std::pair<int, int>(
-     // 			      sourceNodeEdgePointer->iterator->node,
-     // 			      newHeapDataIndex)
-     // 			      );
+    // Key, value
+    // freeVertexHeapMap.insert(
+    // 			      std::pair<int, int>(
+    // 			      sourceNodeEdgePointer->iterator->node,
+    // 			      newHeapDataIndex)
+    // 			      );
      
-     // std::cout<<"The node: "<<sourceNodeEdgePointer->iterator->node
-     // 	      <<", sits at: "<<newHeapDataIndex<<" of the heap."<<std::endl;
-   }
+    // std::cout<<"The node: "<<sourceNodeEdgePointer->iterator->node
+    // 	      <<", sits at: "<<newHeapDataIndex<<" of the heap."<<std::endl;
+  }
 
   // freeVertexHeap.testPrintHeap();
   // freeVertexHeap.testPrintHeapMap();
@@ -210,95 +219,131 @@ int main(int argc, char ** argv )
   //  ---------------------------------------------------
   //  the main loop 
   while(mstVertices.size()!=numberOfNodes){
-  // while(mstVertices.size()!=5){
+    // while(mstVertices.size()!=5){
     std::cout<<"-------------------------New while iteration--- "<<std::endl;
     // freeVertexHeap.testPrintHeap();
     // freeVertexHeap.testPrintHeapMap();
-    if(freeVertexHeap.size()!=freeVertexHeap.nodeHeapMap_.size()){
+    //    if(freeVertexHeap.size()!=freeVertexHeap.nodeHeapMap_.size()){
+    if(freeEdgeHeap.size()!=freeEdgeHeap.nodeHeapMap_.size()){
       std::cout<<"lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"<<std::endl;
     }
-     // //(0) extract the cheapest edge  
-     vertexNode newVertex = freeVertexHeap.extractMin();
-     // std::cout<<"extracted vertex: "<<newVertex.readNodeNumber()<<", with key: "<<newVertex.readKey()<<std::endl;
-     // //(1) add the edge to the tree 
-     mstCost += newVertex.readKey();
-      
-     // //(2) add the node to tree (key, node)
-     // // 2.1 add the node 
-     int nodeNumber = newVertex.readNodeNumber();
-     mstVertices.insert(std::pair<int, int>(nodeNumber,
-					    nodeNumber
-					    )
-			);  
-    
-     // // loop through the edges of node: "nodeNumber"
-     sampleBag <int>  * nodeEdgePointer = G.getNodeEdge(nodeNumber);
-     // std::cout<<"Go through edges of node: "<<nodeNumber<<std::endl;
-    
-     for(nodeEdgePointer->iterator = nodeEdgePointer->getFirst();
-	 nodeEdgePointer->iterator!=NULL; 
-	 nodeEdgePointer->iterator = nodeEdgePointer->iterator->next){
-      
-       //     // If the otherside is on the mst tree already? 
-       int otherVertexNumber = nodeEdgePointer->iterator->node;
-       // std::cout<<"New edge with the other node: "<<otherVertexNumber<<std::endl;
+    // //(0) extract the cheapest edge  
+    //     vertexNode newVertex = freeVertexHeap.extractMin();
+    metaEdge newEdge = freeEdgeHeap.extractMin();
+    std::cout<<"extracted Edge: "<<newEdge.readNodeOne()<<" <-> "<<newEdge.readNodeTwo()<<", with key: "<<newEdge.readKey()<<std::endl;
+    if(!freeEdgeHeap.properHeap()){
+      freeEdgeHeap.testPrintHeap();
+    }
 
-       std::map<int,int>::iterator it;
-       it = mstVertices.find(otherVertexNumber);      
-       if(it==mstVertices.end()){
-	 // std::cout<<"the other side of the edge is NOT on the tree."<<std::endl;
-	 // If the other side of the edge is NOT on the tree 
-	 // 	// (1) compute the key for the other node
-	 int newKey = nodeEdgePointer->iterator->length;
+    // //(1) add the edge to the tree 
+    //     mstCost += newVertex.readKey();
+    mstCost += newEdge.readKey();
+      
+    // //(2) add the node to tree (key, node)
+    // // 2.1 add the node 
+    //     int nodeNumber = newVertex.readNodeNumber();
+    int nodeNumber = newEdge.readNodeTwo();
+    mstVertices.insert(std::pair<int, int>(nodeNumber,
+					   nodeNumber
+					   )
+		       );  
+    
+    // // loop through the edges of node: "nodeNumber"
+    sampleBag <int>  * nodeEdgePointer = G.getNodeEdge(nodeNumber);
+    // std::cout<<"Go through edges of node: "<<nodeNumber<<std::endl;
+    
 
-	 // std::map<int,int>::iterator itHeap;
-	 // itHeap = freeVertexHeapMap.find(otherVertexNumber);      
+    // Explore the new frontier
+    for(nodeEdgePointer->iterator = nodeEdgePointer->getFirst();
+	nodeEdgePointer->iterator!=NULL; 
+	nodeEdgePointer->iterator = nodeEdgePointer->iterator->next){
+      
+      //     // If the otherside is on the mst tree already? 
+      int otherVertexNumber = nodeEdgePointer->iterator->node;
+      // std::cout<<"New edge with the other node: "<<otherVertexNumber<<std::endl;
+
+      std::map<int,int>::iterator it;
+      it = mstVertices.find(otherVertexNumber);      
+      if(it==mstVertices.end()){
+	// std::cout<<"the other side of the edge is NOT on the tree."<<std::endl;
+	// If the other side of the edge is NOT on the tree 
+	// 	// (1) compute the key for the other node
+	int newKey = nodeEdgePointer->iterator->length;
+
+	// std::map<int,int>::iterator itHeap;
+	// itHeap = freeVertexHeapMap.find(otherVertexNumber);      
 	 
-	 // if(itHeap!=freeVertexHeapMap.end()){
-	 if(freeVertexHeap.inHeap(otherVertexNumber)){
-	   // std::cout<<"node: "<<otherVertexNumber<<" is already on the heap. ";
-	   int oldIndex = freeVertexHeap.nodeHeapIndex(otherVertexNumber);
-	   // std::cout<<"node: "<<otherVertexNumber<<" is already on "<<itHeap->second<<" of the heap. ";
+	// if(itHeap!=freeVertexHeapMap.end()){
+	//	 if(freeVertexHeap.inHeap(otherVertexNumber)){
+	if(freeEdgeHeap.inHeap(otherVertexNumber)){
+	  // std::cout<<"node: "<<otherVertexNumber<<" is already on the heap. ";
+	  //	   int oldIndex = freeVertexHeap.nodeHeapIndex(otherVertexNumber);
+	  int oldIndex = freeEdgeHeap.nodeHeapIndex(otherVertexNumber);
+	  // std::cout<<"node: "<<otherVertexNumber<<" is already on "<<itHeap->second<<" of the heap. ";
 
-	   // If the other node is in the heap, delete the other node from the heap 
-	   int oldValue(0);
+	  // If the other node is in the heap, delete the other node from the heap 
+	  int oldValue(0);
 
 	   
-	   vertexNode heapInformation = freeVertexHeap.readElement(oldIndex);
-	   oldValue = heapInformation.readKey();// heap index 
-	   // std::cout<<"The old index is: "<<oldIndex<<" the old key is:"<<oldValue<<" the new key is: "<<newKey<<std::endl;
-	   
-	   freeVertexHeap.deleteElement(oldIndex);
-	   // freeVertexHeapMap.erase(itHeap);
-	   
-	   newKey = oldValue>newKey?newKey:oldValue;	   
-	   // std::cout<<"The new key is: "<<newKey<<std::endl;
-	 }else{
-	   // std::cout<<"node: "<<otherVertexNumber<<" is NOT on the heap. "<<std::endl;
-	 }
+	  //	   vertexNode heapInformation = freeVertexHeap.readElement(oldIndex);
+	  metaEdge heapInformation = freeEdgeHeap.readElement(oldIndex);
 
-	 // (3)Insert the other node on the heap
-	 vertexNode updatedNode(otherVertexNumber, newKey); 
-	 // std::cout<<"new node: "<< otherVertexNumber<<"constructed with key: "<<newKey<<std::endl;
-	 int dataIndex = freeVertexHeap.insert(updatedNode);
-	 // std::cout<<"Insert (heap) node: "<<otherVertexNumber<<" with cost: "<<newKey<<" at "<<dataIndex<<" of the heap."<<std::endl;
+	  oldValue = heapInformation.readKey();// heap index 
+	  // std::cout<<"The old index is: "<<oldIndex<<" the old key is:"<<oldValue<<" the new key is: "<<newKey<<std::endl;
 	   
-	 // freeVertexHeapMap.insert(
-	 // 			  std::pair<int, int>(
-	 // 					      otherVertexNumber,
-	 // 					      dataIndex)
-	 // 			  );
+	  //	   freeVertexHeap.deleteElement(oldIndex);
+	  freeEdgeHeap.deleteElement(oldIndex);
+	  if(!freeEdgeHeap.properHeap()){
+	    freeEdgeHeap.testPrintHeap();
+	  }
+
+	  // freeVertexHeapMap.erase(itHeap);
+	  //	   if(freeVertexHeap.size()!=freeVertexHeap.nodeHeapMap_.size()){
+	  if(freeEdgeHeap.size()!=freeEdgeHeap.nodeHeapMap_.size()){
+	    std::cout<<"lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"<<std::endl;
+	  }
+	   
+	  newKey = oldValue>newKey?newKey:oldValue;	   
+	  // std::cout<<"The new key is: "<<newKey<<std::endl;
+	}else{
+	  // std::cout<<"node: "<<otherVertexNumber<<" is NOT on the heap. "<<std::endl;
+	}
+
+	// (3)Insert the other node on the heap
+	//	 vertexNode updatedNode(otherVertexNumber, newKey); 
+	metaEdge updatedEdge(nodeNumber,
+			     otherVertexNumber, 
+			     newKey); 
+	// std::cout<<"new node: "<< otherVertexNumber<<"constructed with key: "<<newKey<<std::endl;
+	//	 int dataIndex = freeVertexHeap.insert(updatedNode);
+	int dataIndex = freeEdgeHeap.insert(updatedEdge);
+	if(!freeEdgeHeap.properHeap()){
+	  freeEdgeHeap.testPrintHeap();
+	}
+
+	//	 if(freeVertexHeap.size()!=freeVertexHeap.nodeHeapMap_.size()){
+	if(freeEdgeHeap.size()!=freeEdgeHeap.nodeHeapMap_.size()){
+	  std::cout<<"lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"<<std::endl;
+	}
+
+	// std::cout<<"Insert (heap) node: "<<otherVertexNumber<<" with cost: "<<newKey<<" at "<<dataIndex<<" of the heap."<<std::endl;
+	   
+	// freeVertexHeapMap.insert(
+	// 			  std::pair<int, int>(
+	// 					      otherVertexNumber,
+	// 					      dataIndex)
+	// 			  );
 
 
-       }else{
-	 // std::cout<<"This node is already on the MST."<<std::endl;
-       }// end of if 
+      }else{
+	// std::cout<<"This node is already on the MST."<<std::endl;
+      }// end of if 
       
-     }// end of looping edges (the for loop)
+    }// end of looping edges (the for loop)
      // std::cout<<"mstVertices.size() is "<<mstVertices.size()<<std::endl;
-   }// end of while loop
+  }// end of while loop
 
-     std::cout<<"The total cost is: "<<mstCost<<std::endl;
+  std::cout<<"The total cost is: "<<mstCost<<std::endl;
   return 0;
 
 }

@@ -225,7 +225,7 @@ int main(int argc, char ** argv )
     // freeVertexHeap.testPrintHeapMap();
     //    if(freeVertexHeap.size()!=freeVertexHeap.nodeHeapMap_.size()){
     if(freeEdgeHeap.size()!=freeEdgeHeap.nodeHeapMap_.size()){
-      std::cout<<"lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"<<std::endl;
+      std::cout<<"Error: the heap size does not match the heap map size!"<<std::endl;
     }
     // //(0) extract the cheapest edge  
     //     vertexNode newVertex = freeVertexHeap.extractMin();
@@ -301,7 +301,7 @@ int main(int argc, char ** argv )
 	  // freeVertexHeapMap.erase(itHeap);
 	  //	   if(freeVertexHeap.size()!=freeVertexHeap.nodeHeapMap_.size()){
 	  if(freeEdgeHeap.size()!=freeEdgeHeap.nodeHeapMap_.size()){
-	    std::cout<<"lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"<<std::endl;
+	    std::cout<<"Error: heap size does not match the heap map size!"<<std::endl;
 	  }
 	   
 	  newKey = oldValue>newKey?newKey:oldValue;	   
@@ -324,7 +324,7 @@ int main(int argc, char ** argv )
 
 	//	 if(freeVertexHeap.size()!=freeVertexHeap.nodeHeapMap_.size()){
 	if(freeEdgeHeap.size()!=freeEdgeHeap.nodeHeapMap_.size()){
-	  std::cout<<"lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"<<std::endl;
+	  std::cout<<"Error: heap size does not match the heap map size!"<<std::endl;
 	}
 
 	// std::cout<<"Insert (heap) node: "<<otherVertexNumber<<" with cost: "<<newKey<<" at "<<dataIndex<<" of the heap."<<std::endl;

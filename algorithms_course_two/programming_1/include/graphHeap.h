@@ -367,6 +367,7 @@ int replaceData(a_type data){
      if(size()>1){
        bubbleDown(getRoot());
      }  
+
      return;
    }
    bool endElement(false);

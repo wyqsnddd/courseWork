@@ -4,8 +4,10 @@ project(sensor_fusion_project)
 if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
 #  add_definitions("-g -fPIC  -Wall  -O4 -std=gnu++0x  ")
   #add_definitions("-std=gnu++0x  ")
+  add_definitions("-Wall -pg -g")
 endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
+set (CMAKE_EXE_LINKER_FLAGS "-pg")
 
 #set the default path for built executables to the "bin" directory
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

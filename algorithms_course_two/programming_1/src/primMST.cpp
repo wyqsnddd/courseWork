@@ -293,6 +293,7 @@ int main(int argc, char ** argv )
 	   
 	  //	   freeVertexHeap.deleteElement(oldIndex);
 	  freeEdgeHeap.deleteElement(oldIndex);
+
 	  if(!freeEdgeHeap.properHeap()){
 	    freeEdgeHeap.testPrintHeap();
 	  }

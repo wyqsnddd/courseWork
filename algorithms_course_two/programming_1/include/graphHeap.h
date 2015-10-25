@@ -362,6 +362,13 @@ int replaceData(a_type data){
    // }
  }// end of readElement
  void deleteElement(int index){
+   if(index == 0){
+     deleteRootAndReplace();
+     if(size()>1){
+       bubbleDown(getRoot());
+     }  
+     return;
+   }
    bool endElement(false);
    if(!isEmpty()){
      /* testPrintHeap(); */
@@ -383,7 +390,7 @@ int replaceData(a_type data){
      /* testPrintHeapMap(); */
 
    }
-    
+   // Heap maintainance     
    if(!endElement){
      if(size()>1){
        // bubble up or bubble down? 
@@ -399,10 +406,10 @@ int replaceData(a_type data){
 	 std::cout<<"index is: "<<index<<", parent is: "<<parentIndex(index)<<std::endl;
 	 std::cout<<"ERROR----------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
        }
-     }  
+     }// If only one element left     
 
-   }
-
+   }// end of heap maintainance
+   std::cout<<"Just deleted element index: "<<index<<", size was: "<<size()+ 1<<std::endl;
  }
  void testPrintHeap(){
    std::cout<<"The heap is: "<<std::endl;
@@ -479,6 +486,22 @@ int replaceData(a_type data){
      for(int i = size()/2; i>-1 ; i--){
        int status(0);
        if(!properHeapNode(i, status)){
+	 int childLeft = 2*i;
+	 int childRight = 2*i + 1;
+
+	 switch (status){
+	 case 2:  // rightchild 
+	   std::cout<<"array_[index]"<<array_[i]<<", array_[childRight]: "<<array_[childRight]<<std::endl;
+	   break;
+	 case 4: // left child 
+	   std::cout<<"array_[index]"<<array_[i]<<", array_[childLeft]: "<<array_[childLeft]<<std::endl;
+	   break;
+	 case 6: // left and right 
+	   std::cout<<"array_[index]"<<array_[i]<<", array_[childLeft]: "<<array_[childLeft]<<", array_[childRight]: "<<array_[childRight]<<std::endl;
+	   break;
+	 default:
+	   std::cout<<"Cannot find what is wrong"<<std::endl;
+	 }
 	 std::cout<<"Error: not proper heap"<<std::endl;
 	 return false;
        }

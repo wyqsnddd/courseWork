@@ -42,13 +42,14 @@ public:
   int getSize() {
     return n_;
   }
-  a_type getLast(){
-    return *last_;
+  Node* getLast(){
+    return last_;
   }
   //  a_type 
   Node* getFirst(){
     return first_;
   }
+  //  void add(a_type node, a_type length){
   void add(a_type node, a_type length){
     
     if(first_ == NULL){

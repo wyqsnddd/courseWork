@@ -6,9 +6,10 @@
 # include <algorithm>
 
 # include <map>
+# include <queue>
 
 # include "sampleBag.cpp"
-
+# include "metaEdge.h"
 class sampleGraph{
 private: 
   int nN_;
@@ -107,7 +108,80 @@ public:
     return adj[n];
   }  
 
+  void generateMstGraphDotFile(std::queue<metaEdge>  mstEdges){
+    std::ofstream writer("graph.dot", std::ofstream::out);
+    writer<<"digraph {"<<std::endl;
 
+    while(!mstEdges.empty()){
+      
+      metaEdge newEdge = mstEdges.front();
+      writer<<"\t"<<newEdge.readNodeOne()<<" -> "<<newEdge.readNodeTwo()
+	    <<"[label=\""<<newEdge.readKey()<<"\","
+	    <<"weight=\""<<newEdge.readKey()<<"\","
+	    <<"color=red, penwidth=3.0"<<"]"
+	    <<";"<<std::endl;
+      
+      mstEdges.pop();
+    }
+
+
+    for(int i = 0; i < getNumberOfNodes(); i++){
+      for(adj[i]->iterator = adj[i]->getFirst(); 
+	  adj[i]->iterator!=NULL; 
+	  adj[i]->iterator = adj[i]->iterator->next
+	  ){
+	
+	writer<<"\t"<<i<<" -> "<<adj[i]->iterator->node
+	      <<"[label=\""<<adj[i]->iterator->length<<"\","
+	      <<"weight=\""<<adj[i]->iterator->length<<"\"]"
+	      <<";"<<std::endl;
+
+      }// end of the edges of a node
+    } // end of nodes   
+    writer<<"}"<<std::endl;
+    writer.close();
+
+  }
+  void generateDiGraphDotFile(){
+    std::ofstream writer("graph.dot", std::ofstream::out);
+    writer<<"digraph {"<<std::endl;
+    for(int i = 0; i < getNumberOfNodes(); i++){
+      for(adj[i]->iterator = adj[i]->getFirst(); 
+	  adj[i]->iterator!=NULL; 
+	  adj[i]->iterator = adj[i]->iterator->next
+	  ){
+	
+	writer<<"\t"<<i<<" -> "<<adj[i]->iterator->node
+	      <<"[label=\""<<adj[i]->iterator->length<<"\","
+	      <<"weight=\""<<adj[i]->iterator->length<<"\"]"
+	      <<";"<<std::endl;
+
+      }// end of the edges of a node
+    } // end of nodes   
+    writer<<"}"<<std::endl;
+    writer.close();
+
+  }
+  void generateGraphDotFile(){
+    std::ofstream writer("graph.dot", std::ofstream::out);
+    writer<<"graph {"<<std::endl;
+    for(int i = 0; i < getNumberOfNodes(); i++){
+      for(adj[i]->iterator = adj[i]->getFirst(); 
+	  adj[i]->iterator!=NULL; 
+	  adj[i]->iterator = adj[i]->iterator->next
+	  ){
+	
+	writer<<"\t"<<i<<" -- "<<adj[i]->iterator->node
+	      <<"[label=\""<<adj[i]->iterator->length<<"\","
+	      <<"weight=\""<<adj[i]->iterator->length<<"\"]"
+	      <<";"<<std::endl;
+
+      }// end of the edges of a node
+    } // end of nodes   
+    writer<<"}"<<std::endl;
+    writer.close();
+
+  }
 };
 
 

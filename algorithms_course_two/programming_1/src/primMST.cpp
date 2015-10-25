@@ -4,7 +4,7 @@
 # include "vertexNode.h"
 # include "sampleGraph.cpp"
 # include "metaEdge.h"
-
+# include <queue>
 int main(int argc, char ** argv )
 {
 
@@ -110,6 +110,7 @@ int main(int argc, char ** argv )
 
   // Initialization 
   sampleGraph G(numberOfNodes);
+
   // G.setHashTable(hashTableIntPointer);  
 
   // reset the reader 
@@ -154,12 +155,16 @@ int main(int argc, char ** argv )
   }
 
   G.printGraph();
+  // G.generateDiGraphDotFile();
+
   //---------------------------------------------------
   // Initialize the invariants
   int mstCost(0);
   
   // vertex nodes in the tree 
   std::map<int, int>  mstVertices;
+  std::queue <metaEdge> mstEdges;
+  
   // key, node
   mstVertices.insert(std::pair<int, int>(sourceNode, sourceNode));  
   
@@ -230,6 +235,7 @@ int main(int argc, char ** argv )
     // //(0) extract the cheapest edge  
     //     vertexNode newVertex = freeVertexHeap.extractMin();
     metaEdge newEdge = freeEdgeHeap.extractMin();
+    mstEdges.push(newEdge);
     std::cout<<"extracted Edge: "<<newEdge.readNodeOne()<<" <-> "<<newEdge.readNodeTwo()<<", with key: "<<newEdge.readKey()<<std::endl;
     if(!freeEdgeHeap.properHeap()){
       freeEdgeHeap.testPrintHeap();
@@ -343,8 +349,12 @@ int main(int argc, char ** argv )
     }// end of looping edges (the for loop)
      // std::cout<<"mstVertices.size() is "<<mstVertices.size()<<std::endl;
   }// end of while loop
-
+  G.generateMstGraphDotFile(mstEdges);
   std::cout<<"The total cost is: "<<mstCost<<std::endl;
+  while(!mstEdges.empty()){
+    std::cout<<mstEdges.front()<<std::endl;
+    mstEdges.pop();
+  }
   return 0;
 
 }
